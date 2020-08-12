@@ -1,7 +1,7 @@
-6 7 5
-.......
-...O.O.
-....O..
-..O....
-OO...OO
-OO.O...
+6 6
+BGBBGB
+GGGGGG
+BGBBGB
+GGGGGG
+BGBBGB
+BGBBGB
