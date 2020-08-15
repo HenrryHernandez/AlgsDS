@@ -3,6 +3,11 @@
 using namespace std;
 
 /*
+How it works? It basically traverses all the array starting from the beginning and, everytime, it 
+compares with the value at the next position and if they're in wrong order they're swapped and then, 
+or if not, it continues doing the same with the next one and so on and so forth until it reaches the 
+final of the array. It does the exact thing for N times, where N is the number of elements on the array.
+
 Worst and Average Case Time Complexity: O(n*n). Worst case occurs when array is reverse sorted.
 
 Best Case Time Complexity: O(n). Best case occurs when array is already sorted.
