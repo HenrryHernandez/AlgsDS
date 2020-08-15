@@ -3,6 +3,13 @@
 using namespace std;
 
 /*
+
+How it works? It traverses the whole array looking for the smallest value, starting form the beginning, once 
+it finds it, it swaps it for the value at first position; now we'll have the smalles value at the beginning. Then 
+it does the same thing, but with the second place to find, now this time, the second smallest, so we start now at 
+the second position and do exactly the same. And so on and so forth until it is sorted.
+
+
 Time Complexity: O(n2) as there are two nested loops.
 
 Auxiliary Space: O(1)
