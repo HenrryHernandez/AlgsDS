@@ -33,7 +33,7 @@ int main(){
             vec.push_back(number);
         }
         cout << canConstruct(vec) << endl;
-    }asdsada
+    }
 
     return 0;
 }
