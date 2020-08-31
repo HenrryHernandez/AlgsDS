@@ -8,8 +8,8 @@ struct Node{
     Node* right;
 };
 
+void insertNodeIterative(Node** root, int data){
 
-void insertNode(Node** root, int data){
     Node* newNode = new Node();
     newNode->data = data;
 
@@ -18,17 +18,8 @@ void insertNode(Node** root, int data){
         return;
     }
 
-    //RECURSIVE WAY OF INSERTING AN ELEMENT
-    if(data <= (*root)->data){
-        insertNode(&(*root)->left, data);
-    }else{
-        insertNode(&(*root)->right, data);
-    }
-
-
-    //ITERATIVE WAY OF INSERTING AN ELEMENT
-    /*Node* temp = *root;
-    while(true){
+    Node* temp = *root;
+    while(true)
         if(data <= temp->data){
             if(temp->left == NULL){
                 temp->left = newNode;
@@ -43,8 +34,21 @@ void insertNode(Node** root, int data){
             }
             temp = temp->right;
         }
-    }*/
+}
 
+void insertNodeRecursive(Node** root, int data){
+    Node* newNode = new Node();
+    newNode->data = data;
+
+    if(*root == NULL){
+        *root = newNode;
+        return;
+    }
+
+    if(data <= (*root)->data)
+        insertNodeRecursive(&(*root)->left, data);
+    else
+        insertNodeRecursive(&(*root)->right, data);
 }
 
 bool findNode(Node* root, int value){
@@ -59,11 +63,10 @@ bool findNode(Node* root, int value){
             return true;
         }
 
-        if(value < temp->data){
+        if(value < temp->data)
             temp = temp->left;
-        }else{
+        else
             temp = temp->right;
-        }
     }
 
     cout << "c = " << c << endl;
@@ -74,14 +77,22 @@ Node* findMin(Node** root){
     if(*root == NULL) return *root;
 
     Node* temp = *root;
-    while(temp->left != NULL){
+    while(temp->left != NULL)
         temp = temp->left;
-    }
 
     return temp;
 }
 
-//THIS IS MY APROACH TO DO THE DELETION ITERATIVELY
+Node* findMax(Node** root){
+    if(*root == NULL) return *root;
+
+    Node* temp = *root;
+    while(temp->right != NULL)
+        temp = temp->right;
+
+    return temp;
+}
+
 void deleteNodeIterative(Node** root, int value){
 
     if(!findNode(*root, value)){
@@ -90,30 +101,25 @@ void deleteNodeIterative(Node** root, int value){
     }
 
     Node* temp = *root;
-    while(temp->data != value){
-        if(temp->data < value){
+    while(temp->data != value)
+        if(temp->data < value)
             temp = temp->right;
-        }else{
+        else
             temp = temp->left;
-        }
-    }
 
     temp->data = findMin(&temp->right)->data;
     delete(findMin(&temp->right));
 }
 
-//THIS IS MY APROACH TO DO THE DELETION RECURSIVELY
 Node* deleteNodeRecursive(Node** root, int value){
 
-    if(*root == NULL){
-        return NULL;
-    }
+    if(*root == NULL) return NULL;
 
-    if((*root)->data < value){
+    if((*root)->data < value)
         (*root)->right = deleteNodeRecursive(&(*root)->right, value);
-    }else if((*root)->data > value){
+    else if((*root)->data > value)
         (*root)->left = deleteNodeRecursive(&(*root)->left, value);
-    }else{
+    else
         if((*root)->left == NULL && (*root)->right == NULL){
             delete *root;
             *root = NULL;
@@ -129,32 +135,141 @@ Node* deleteNodeRecursive(Node** root, int value){
             (*root)->data = findMin(&(*root)->right)->data;
             delete(findMin(&(*root)->right));
         }
-    }
 
     return *root;
 
 }
 
+int findHeight(Node* root){
+    if(root == NULL)
+        return -1;
+    return max(findHeight(root->left), findHeight(root->right)) + 1;
+}
+
 void printTree(Node** root){
     if(*root == NULL) return;
 
-    if((*root)->left == NULL){
+    if((*root)->left == NULL)
         cout << "NULL";
-    }else{
+    else
         cout << (*root)->left->data;
-    }
 
     cout << " <= " << (*root)->data << " => ";
 
-    if((*root)->right == NULL){
+    if((*root)->right == NULL)
         cout << "NULL" << endl;
-    }else{
+    else
         cout << (*root)->right->data << endl;
-    }
 
     printTree(&(*root)->left);
     printTree(&(*root)->right);
 }
+
+void preorderTraversal(Node* root){
+    if(root == NULL) return;
+
+    preorderTraversal(root->left);
+    cout << root->data << " ";
+    preorderTraversal(root->right);
+}
+
+void inorderTraversal(Node* root){
+    if(root == NULL) return;
+
+    cout << root->data << " ";
+    inorderTraversal(root->left);
+    inorderTraversal(root->right);
+}
+
+void postorderTraversal(Node* root){
+    if(root == NULL) return;
+
+    postorderTraversal(root->left);
+    postorderTraversal(root->right);
+    cout << root->data << " ";
+}
+
+void levelOrder(queue<Node*>& levelQueue){
+    if(levelQueue.front() == NULL && !levelQueue.empty()){
+        levelQueue.pop();
+        levelOrder(levelQueue);
+        return;
+    };
+
+    levelQueue.push(levelQueue.front()->left);
+    levelQueue.push(levelQueue.front()->right);
+    cout << levelQueue.front()->data << endl;
+    levelQueue.pop();
+    levelOrder(levelQueue);
+}
+
+void levelorderTraversar(queue<Node*>& levelQueue){
+    while(!levelQueue.empty()){
+        cout << levelQueue.front()->data << " ";
+    }
+    cout << endl;
+}
+
+
+int main(){
+
+    Node* root = NULL;
+    insertNodeIterative(&root, 14);
+    insertNodeIterative(&root, 9);
+    insertNodeIterative(&root, 7);
+    insertNodeIterative(&root, 10);
+    insertNodeIterative(&root, 15);
+    insertNodeIterative(&root, 40);
+    insertNodeIterative(&root, 20);
+    insertNodeIterative(&root, 45);
+    insertNodeIterative(&root, 19);
+    insertNodeRecursive(&root, 25);
+    insertNodeRecursive(&root, 43);
+    insertNodeRecursive(&root, 50);
+    insertNodeRecursive(&root, 52);
+    insertNodeRecursive(&root, 42);
+    insertNodeRecursive(&root, 44);
+    insertNodeRecursive(&root, 51);
+    insertNodeRecursive(&root, 0);
+    insertNodeRecursive(&root, -1);
+
+
+    printTree(&root);
+    cout << endl;
+    cout << endl;
+
+    cout << "MIN = " << findMin(&root)->data << endl;
+    cout << "MAX = " << findMax(&root)->data << endl;
+    cout << "HEIGHT = " << findHeight(root) << endl;
+    cout << "PREORDER = ";
+    preorderTraversal(root);
+    cout << endl;
+    cout << "INORDER = ";
+    inorderTraversal(root);
+    cout << endl;
+    cout << "POSTORDER = ";
+    postorderTraversal(root);
+    cout << endl;
+
+    queue<Node*> levelQueue;
+    levelQueue.push(root);
+    cout << "LEVEL TRAVERSAL = ";
+    levelOrder(levelQueue);
+    //levelorderTraversar(levelQueue);
+
+
+    /*deleteNodeRecursive(&root, 50);
+    cout << endl;
+    cout << endl;
+    printTree(&root);*/
+
+
+    cout << endl;
+    cout << endl;
+
+    return 0;
+}
+
 
 
 //THIS IS A WAY I FOUND ON THE INTERNET TO DO THE DELETION
@@ -193,37 +308,3 @@ void printTree(Node** root){
     return *root;
 
 }*/
-
-int main(){
-
-    Node* root;
-    insertNode(&root, 14);
-    insertNode(&root, 9);
-    insertNode(&root, 7);
-    insertNode(&root, 10);
-    insertNode(&root, 15);
-    insertNode(&root, 40);
-    insertNode(&root, 20);
-    insertNode(&root, 45);
-    insertNode(&root, 19);
-    insertNode(&root, 25);
-    insertNode(&root, 43);
-    insertNode(&root, 50);
-    insertNode(&root, 52);
-    insertNode(&root, 42);
-    insertNode(&root, 44);
-    insertNode(&root, 51);
-    insertNode(&root, 0);
-    insertNode(&root, -1);
-
-
-    printTree(&root);
-    cout << endl;
-    cout << endl;
-    //cout << findNode(root, 50) << endl;
-    deleteNodeRecursive(&root, 50);
-    //cout << findNode(root, 50) << endl;
-    printTree(&root);
-
-    return 0;
-}
