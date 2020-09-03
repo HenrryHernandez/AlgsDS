@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 
+
 using namespace std;
 
 struct Node{
@@ -12,6 +13,7 @@ void insertNodeIterative(Node** root, int data){
 
     Node* newNode = new Node();
     newNode->data = data;
+    newNode->left = newNode->right = NULL;
 
     if(*root == NULL){
         *root = newNode;
@@ -39,6 +41,7 @@ void insertNodeIterative(Node** root, int data){
 void insertNodeRecursive(Node** root, int data){
     Node* newNode = new Node();
     newNode->data = data;
+    newNode->left = newNode->right = NULL;
 
     if(*root == NULL){
         *root = newNode;
@@ -165,23 +168,23 @@ void printTree(Node** root){
     printTree(&(*root)->right);
 }
 
-void preorderTraversal(Node* root){
+void preorderTraversal(Node* root){ //<root><left><right>
     if(root == NULL) return;
 
-    preorderTraversal(root->left);
     cout << root->data << " ";
+    preorderTraversal(root->left);
     preorderTraversal(root->right);
 }
 
-void inorderTraversal(Node* root){
+void inorderTraversal(Node* root){ //<left><root><right>
     if(root == NULL) return;
 
-    cout << root->data << " ";
     inorderTraversal(root->left);
+    cout << root->data << " ";
     inorderTraversal(root->right);
 }
 
-void postorderTraversal(Node* root){
+void postorderTraversal(Node* root){ //<left><right><root>
     if(root == NULL) return;
 
     postorderTraversal(root->left);
@@ -189,25 +192,41 @@ void postorderTraversal(Node* root){
     cout << root->data << " ";
 }
 
-void levelOrder(queue<Node*>& levelQueue){
-    if(levelQueue.front() == NULL && !levelQueue.empty()){
-        levelQueue.pop();
-        levelOrder(levelQueue);
-        return;
-    };
+void levelorderTraversar(queue<Node*>& levelQueue){
+    if(levelQueue.front() == NULL) return;
 
-    levelQueue.push(levelQueue.front()->left);
-    levelQueue.push(levelQueue.front()->right);
-    cout << levelQueue.front()->data << endl;
+    if(levelQueue.front()->left != NULL) levelQueue.push(levelQueue.front()->left);
+    if(levelQueue.front()->right != NULL) levelQueue.push(levelQueue.front()->right);
+    cout << levelQueue.front()->data << " ";
     levelQueue.pop();
-    levelOrder(levelQueue);
+    levelorderTraversar(levelQueue);
 }
 
-void levelorderTraversar(queue<Node*>& levelQueue){
-    while(!levelQueue.empty()){
-        cout << levelQueue.front()->data << " ";
+bool checkIfBST(Node* root, int minVal, int maxVal){
+    if(root == NULL) return true;
+
+    if(minVal > root->data || root->data > maxVal)
+        return false;
+    else
+        return checkIfBST(root->left, minVal, root->data) && checkIfBST(root->right, root->data, maxVal);
+}
+
+Node* inorderSuccessor(Node* root, int value, Node* parentNode){
+    if(root == NULL){
+        return root;
     }
-    cout << endl;
+
+    if(root->data == value && root->right != NULL){
+        return findMin(&root->right);
+    }else if(root->data == value && root->right == NULL && root->data > parentNode->data){
+        return NULL;
+    }else if(root->data == value && root->right == NULL && root->data < parentNode->data){
+        return parentNode;
+    }else if(root->data < value){
+        return inorderSuccessor(root->right, value, root);
+    }else{
+        return inorderSuccessor(root->left, value, root);
+    }
 }
 
 
@@ -232,6 +251,8 @@ int main(){
     insertNodeRecursive(&root, 51);
     insertNodeRecursive(&root, 0);
     insertNodeRecursive(&root, -1);
+    insertNodeIterative(&root, 10);
+    insertNodeIterative(&root, 14);
 
 
     printTree(&root);
@@ -254,17 +275,37 @@ int main(){
     queue<Node*> levelQueue;
     levelQueue.push(root);
     cout << "LEVEL TRAVERSAL = ";
-    levelOrder(levelQueue);
-    //levelorderTraversar(levelQueue);
+    levelorderTraversar(levelQueue);
+    cout << endl;
 
+    //this code helps to test the "checkIfBST()" function with the insertions made upper in the code. It should not be a BST.
+    /*Node* newNode = new Node();
+    newNode->data = 11;
+    newNode->left = newNode->right = NULL;
+    root->right->left = newNode;
+    cout << root->right->left->data << endl;
+    printTree(&root);*/
+
+    cout << "IS IT A BST? ";
+    if(checkIfBST(root, INT_MIN, INT_MAX)) cout << "It is" << endl;
+    else cout << "It's not" << endl;
+
+    int inS = 52;
+    cout << "WHAT IS THE SUCCESSOR OF " << inS << "? ";
+    Node* inSNode = inorderSuccessor(root, inS, root);
+    if(inSNode == NULL) cout << "There is no successor" << endl;
+    else cout << inSNode->data << endl;
 
     /*deleteNodeRecursive(&root, 50);
     cout << endl;
     cout << endl;
     printTree(&root);*/
 
-
     cout << endl;
+    printTree(&root);
+    cout << endl;
+
+
     cout << endl;
 
     return 0;
@@ -307,4 +348,40 @@ int main(){
 
     return *root;
 
+}*/
+
+
+//THIS IS A LESS EFICIENT WAY TO CHECK IF A TREE IS A BST, BUT IT'S INTERESTING SO I APPEND IT HERE
+/*bool isSubtreeLesser(Node* root, int data){
+    if(root == NULL) return true;
+
+    if( root->data <= data &&
+        isSubtreeLesser(root->left, data) &&
+        isSubtreeLesser(root->right, data))
+        return true;
+    else
+        return false;
+}
+
+bool isSubtreeGreater(Node* root, int data){
+    if(root == NULL) return true;
+
+    if( root->data > data &&
+        isSubtreeGreater(root->left, data) &&
+        isSubtreeGreater(root->right, data))
+        return true;
+    else
+        return false;
+}
+
+bool isBinarySearchTree(Node* root){
+    if(root == NULL) return true;
+
+    if( isSubtreeLesser(root->left, root->data) &&
+        isSubtreeGreater(root->right, root->data) &&
+        isBinarySearchTree(root->left) &&
+        isBinarySearchTree(root->right))
+        return true;
+    else
+        return false;
 }*/
