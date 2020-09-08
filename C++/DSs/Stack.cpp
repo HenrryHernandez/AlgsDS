@@ -53,7 +53,7 @@ int nElements(){
     return nNodes;
 }
 
-void printLinkedList(){
+void printStack(){
     Node* temp;
     temp = head;
 
@@ -73,12 +73,12 @@ int main(){
     push(45);
     push(55);
 
-    printLinkedList();
+    printStack();
     cout << "in front is = "<< atPeek() << endl << endl;
     cout << "how many are there = "<< nElements() << endl << endl;
 
     pop();
-    printLinkedList();
+    printStack();
     cout << "in front is = "<< atPeek() << endl << endl;
     cout << "how many are there = "<< nElements() << endl << endl;
 

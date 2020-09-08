@@ -138,6 +138,26 @@ void reverseLinkedListIteration(){
 
 }
 
+void reverseLinkedListWithStack(){
+    stack<Node*> reverseLL;
+    Node* temp = head;
+    while(temp != NULL){
+        reverseLL.push(temp);
+        temp = temp->next;
+    }
+
+    temp = reverseLL.top();
+    reverseLL.pop();
+    head = temp;
+    while(!reverseLL.empty()){
+        temp->next = reverseLL.top();
+        reverseLL.pop();
+        temp = temp->next;
+    }
+    temp->next = NULL;
+
+}
+
 int main(){
 
     insertNodeAtEnd(5);
@@ -148,9 +168,8 @@ int main(){
     insertNodeAtEnd(55);
 
     printLinkedList();
-    deleteNodeAtPosition(4);
-    printLinkedList();
-    reverseLinkedListRecursion(head);
+    reverseLinkedListWithStack();
+    cout << endl;
     printLinkedList();
 
     return 0;

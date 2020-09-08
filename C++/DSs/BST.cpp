@@ -1,5 +1,37 @@
 #include <bits/stdc++.h>
 
+/*
+
+Binary Search Tree: Used for searching. A binary tree where the left child contains only
+nodes with values less than the parent node, and where the right child only contains nodes
+with values greater than or equal to the parent.
+
+Propeties:
+    -2 Children max
+    -Smaller or equal values go to the left of the root.
+    -Bigger values go to the right of the root.
+
+*What are the differences between Binary Trees and BTS?
+Binary Tree stands for a data structure which is made up of nodes that can only have two
+children references.
+Binary Search Tree (BST) on the other hand, is a special form of Binary Tree data structure
+where each node has a comparable value, and smaller valued children attached to left and larger
+valued children attached to the right.
+Thus, all BST's are Binary Tree however only some Binary Tree's may be also BST. Notify that BST
+is a subset of Binary Tree.
+So, Binary Tree is more of a general data-structure than Binary Search Tree. And also you have to
+notify that Binary Search Tree is a sorted tree whereas there is no such set of rules for generic
+Binary Tree.
+
+*What are the differences between AVL Trees and BTS?
+The only difference between AVL Tree and Binary Search Tree is that AVL Tree is a self-balancing tree BST.
+
+            Average     Worst case
+Space		O(n)	    O(n)
+Search		O(log n)	O(n)
+Insert		O(log n)	O(n)
+Delete		O(log n)	O(n)
+*/
 
 using namespace std;
 
@@ -39,11 +71,10 @@ void insertNodeIterative(Node** root, int data){
 }
 
 void insertNodeRecursive(Node** root, int data){
-    Node* newNode = new Node();
-    newNode->data = data;
-    newNode->left = newNode->right = NULL;
-
     if(*root == NULL){
+        Node* newNode = new Node();
+        newNode->data = data;
+        newNode->left = newNode->right = NULL;
         *root = newNode;
         return;
     }
@@ -149,25 +180,6 @@ int findHeight(Node* root){
     return max(findHeight(root->left), findHeight(root->right)) + 1;
 }
 
-void printTree(Node** root){
-    if(*root == NULL) return;
-
-    if((*root)->left == NULL)
-        cout << "NULL";
-    else
-        cout << (*root)->left->data;
-
-    cout << " <= " << (*root)->data << " => ";
-
-    if((*root)->right == NULL)
-        cout << "NULL" << endl;
-    else
-        cout << (*root)->right->data << endl;
-
-    printTree(&(*root)->left);
-    printTree(&(*root)->right);
-}
-
 void preorderTraversal(Node* root){ //<root><left><right>
     if(root == NULL) return;
 
@@ -229,6 +241,35 @@ Node* inorderSuccessor(Node* root, int value, Node* parentNode){
     }
 }
 
+void invertTree(Node** root){
+    if(*root == NULL) return;
+
+    invertTree(&(*root)->left);
+    invertTree(&(*root)->right);
+
+    Node* temp = (*root)->left;
+    (*root)->left = (*root)->right;
+    (*root)->right = temp;
+}
+
+void printTree(Node** root){
+    if(*root == NULL) return;
+
+    if((*root)->left == NULL)
+        cout << "NULL";
+    else
+        cout << (*root)->left->data;
+
+    cout << " <= " << (*root)->data << " => ";
+
+    if((*root)->right == NULL)
+        cout << "NULL" << endl;
+    else
+        cout << (*root)->right->data << endl;
+
+    printTree(&(*root)->left);
+    printTree(&(*root)->right);
+}
 
 int main(){
 
@@ -304,6 +345,13 @@ int main(){
     cout << endl;
     printTree(&root);
     cout << endl;
+
+    invertTree(&root);
+
+    cout << endl;
+    printTree(&root);
+    cout << endl;
+
 
 
     cout << endl;
