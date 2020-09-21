@@ -2,7 +2,7 @@
 
 using namespace std;
 
-
+//Complexity: log(n + m)
 
 double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
     if(nums1.size() > nums2.size()) return findMedianSortedArrays(nums2, nums1);
@@ -29,7 +29,7 @@ double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
             }else{
                 return (double)max(maxLeftX, maxLeftY);
             }
-        }else if(maxLeftX > maxLeftY){
+        }else if(maxLeftX > minRightY){
             endd = partitionX - 1;
         }else{
             startt = partitionX + 1;
@@ -41,7 +41,7 @@ double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
 
 int main(){
 
-    vector<int> nums1 = {};
+    vector<int> nums1 = {1, 3};
     vector<int> nums2 = {2};
     //  1, 2, 7, 8, 9, 11, 15, 18, 19, 21, 25
 
