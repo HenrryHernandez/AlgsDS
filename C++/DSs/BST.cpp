@@ -217,10 +217,20 @@ void levelorderTraversar(queue<Node*>& levelQueue){
 bool checkIfBST(Node* root, int minVal, int maxVal){
     if(root == NULL) return true;
 
-    if(minVal > root->data || root->data > maxVal)
+    /*if(minVal > root->data || root->data > maxVal)
         return false;
     else
         return checkIfBST(root->left, minVal, root->data) && checkIfBST(root->right, root->data, maxVal);
+*/
+
+   if(root->val < maxVal && root->val > minVal &&
+     checkIfBST(root->left, minVal, root->val) &&
+     checkIfBST(root->right, root->val, maxVal)
+     {
+	return true;
+     }
+
+     return false;
 }
 
 Node* inorderSuccessor(Node* root, int value, Node* parentNode){
