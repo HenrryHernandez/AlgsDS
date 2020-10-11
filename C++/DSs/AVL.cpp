@@ -30,80 +30,76 @@ struct Node{
     int data;
     Node* left;
     Node* right;
-    Node* parent;
     int height;
 };
+void printTree(Node* root);
 
-void rotateLeft(Node** root){
-    Node* temp = (*root)->right;
-    (*root)->right = temp->left;
-    temp->left = (*root);
-    temp->parent = (*root)->parent;
-    (*root)->parent->left = temp;
-    (*root)->parent = temp;
+int height(Node* root){
+    if (root == NULL) return 0;
+    else return root->height;
 }
 
-void rotateRight(Node** root){
-    Node* temp = (*root)->left;
-    (*root)->left = temp->right;
-    temp->right = (*root);
-    temp->parent = (*root)->parent;
-    (*root)->parent->right = temp;
-    (*root)->parent = temp;
+void rightRotation(Node*& root){
+    Node* temp = root->left;
+    root->left = temp->right;
+    temp->right= root;
+    root = temp;
+
+    Node* prevRoot = root->right; //this is the node which we applied the rotation to
+
+    prevRoot->height = max(height(prevRoot->left), height(prevRoot->right)) + 1;
+    root->height = max(height(root->left), height(root->right)) + 1;
 }
 
-void rebalanceTree(Node** root){
-    if(root == NULL) return;
+void leftRotation(Node*& root){
+    Node* temp = root->right;
+    root->right = temp->left;
+    temp->left = root;
+    root = temp;
 
-    if((*root)->left->height < (*root)->right->height){
-        rebalanceTree(&(*root)->right);
-    }else{
-        rebalanceTree(&(*root)->left);
-    }
+    Node* prevRoot = root->left; //this is the node which we applied the rotation to
 
-    if((*root)->left == NULL && (*root)->right == NULL){
-        return;
-    }else if((*root)->left == NULL){
-        rotateLeft(root);
-    }else if((*root)->right == NULL){
-        rotateRight(root);
-    }
+    prevRoot->height = max(height(prevRoot->right), height(prevRoot->left)) + 1;
+    root->height = max(height(root->right), height(root->left)) + 1;
 }
 
-void insertNode(Node** root, Node** parent, int data){
-    if(*root == NULL){
+int checkBalance(Node* root){
+    if(root == NULL) return 0;
+    return height(root->left) - height(root->right);
+}
+
+void insertNode(Node*& root, int data){
+    if(root == NULL){
         Node* newNode = new Node();
         newNode->data = data;
         newNode->left = newNode->right = NULL;
-        newNode->parent = *parent;
-        newNode->height = 0;
-        *root = newNode;
+        newNode->height = 1;
+        root = newNode;
         return;
     }
 
-
-    if(data <= (*root)->data){
-        insertNode(&(*root)->left, root, data);
+    if(data <= root->data){
+        insertNode(root->left, data);
     }else{
-        insertNode(&(*root)->right, root, data);
+        insertNode(root->right, data);
     }
 
-    if((*root)->left == NULL)
-        (*root)->height = (*root)->right->height + 1;
-    else if((*root)->right == NULL)
-        (*root)->height = (*root)->left->height + 1;
-    else
-        (*root)->height = max((*root)->left->height, (*root)->right->height) + 1;
+    root->height = max(height(root->left), height(root->right)) + 1;
 
-    if((*root)->height == 0){
-        return;
-    }else if((*root)->left == NULL && (*root)->right->height + 1 > 1){
-        rebalanceTree(root);
-    }else if((*root)->right == NULL && (*root)->left->height + 1 > 1){
-        rebalanceTree(root);
-    }else if(abs((*root)->left->height - (*root)->right->height) > 1){
-        rebalanceTree(root);
+    int balance = checkBalance(root);
+
+    if(balance > 1 && data <= root->left->data){ //LL
+        rightRotation(root);
+    }else if(balance > 1 && data > root->left->data){ //LR
+        leftRotation(root->left);
+        rightRotation(root);
+    }else if(balance < -1 && data <= root->right->data){ //RL
+        rightRotation(root->right);
+        leftRotation(root);
+    }else if(balance < -1 && data > root->right->data){ //RR
+        leftRotation(root);
     }
+
 }
 
 void printTree(Node* root){
@@ -128,9 +124,12 @@ void printTree(Node* root){
 int main(){
     Node* root = NULL;
 
-    insertNode(&root, &root, 14);
-    insertNode(&root, &root, 9);
-    insertNode(&root, &root, 7);
+    insertNode(root, 10);
+    insertNode(root, 20);
+    insertNode(root, 30);
+    insertNode(root, 40);
+    insertNode(root, 50);
+    insertNode(root, 25);
 
     printTree(root);
 
