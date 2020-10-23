@@ -127,24 +127,6 @@ Node* findMax(Node** root){
     return temp;
 }
 
-void deleteNodeIterative(Node** root, int value){
-
-    if(!findNode(*root, value)){
-        cout << "there is no such node" << endl;
-        return;
-    }
-
-    Node* temp = *root;
-    while(temp->data != value)
-        if(temp->data < value)
-            temp = temp->right;
-        else
-            temp = temp->left;
-
-    temp->data = findMin(&temp->right)->data;
-    delete(findMin(&temp->right));
-}
-
 Node* deleteNodeRecursive(Node** root, int value){
 
     if(*root == NULL) return NULL;
@@ -154,20 +136,18 @@ Node* deleteNodeRecursive(Node** root, int value){
     else if((*root)->data > value)
         (*root)->left = deleteNodeRecursive(&(*root)->left, value);
     else
-        if((*root)->left == NULL && (*root)->right == NULL){
-            delete *root;
-            *root = NULL;
-        }else if((*root)->right == NULL){
-            Node* temp = *root;
-            *root = (*root)->left;
-            delete(temp);
+        if((*root)->right == NULL){
+            Node* temp = (*root)->left;
+            delete(*root);
+            return temp;
         }else if((*root)->left == NULL){
-            Node* temp = *root;
-            *root = (*root)->right;
-            delete(temp);
+            Node* temp = (*root)->right;
+            delete(*root);
+            return temp;
         }else{
-            (*root)->data = findMin(&(*root)->right)->data;
-            delete(findMin(&(*root)->right));
+            Node* temp = findMin(&(*root)->right);
+            (*root)->data = temp->data;
+            (*root)->right = deleteNodeRecursive(&(*root)->right, temp->data);
         }
 
     return *root;
@@ -223,14 +203,14 @@ bool checkIfBST(Node* root, int minVal, int maxVal){
         return checkIfBST(root->left, minVal, root->data) && checkIfBST(root->right, root->data, maxVal);
 */
 
-   if(root->val < maxVal && root->val > minVal &&
-     checkIfBST(root->left, minVal, root->val) &&
-     checkIfBST(root->right, root->val, maxVal)
+   if(root->data < maxVal && root->data > minVal &&
+     checkIfBST(root->left, minVal, root->data) &&
+     checkIfBST(root->right, root->data, maxVal))
      {
-	return true;
+        return true;
      }
 
-     return false;
+        return false;
 }
 
 Node* inorderSuccessor(Node* root, int value, Node* parentNode){
@@ -304,6 +284,15 @@ int main(){
     insertNodeRecursive(&root, -1);
     insertNodeIterative(&root, 10);
     insertNodeIterative(&root, 14);
+    insertNodeIterative(&root, 99);
+    insertNodeIterative(&root, 110);
+    insertNodeIterative(&root, 105);
+    insertNodeIterative(&root, 106);
+    insertNodeIterative(&root, 104);
+    insertNodeIterative(&root, 111);
+    insertNodeIterative(&root, 122);
+    insertNodeIterative(&root, 133);
+    insertNodeIterative(&root, 144);
 
 
     printTree(&root);
@@ -355,12 +344,16 @@ int main(){
     cout << endl;
     printTree(&root);
     cout << endl;
-
-    invertTree(&root);
-
+    deleteNodeRecursive(&root, 110);
     cout << endl;
     printTree(&root);
     cout << endl;
+
+    /*invertTree(&root);
+
+    cout << endl;
+    printTree(&root);
+    cout << endl;*/
 
 
 

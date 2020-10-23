@@ -68,6 +68,61 @@ int checkBalance(Node* root){
     return height(root->left) - height(root->right);
 }
 
+void reabalance(Node*& root, int data){
+    int balance = checkBalance(root);
+
+    if(balance > 1 && data <= root->left->data){ //LL
+        rightRotation(root);
+    }else if(balance > 1 && data > root->left->data){ //LR
+        leftRotation(root->left);
+        rightRotation(root);
+    }else if(balance < -1 && data <= root->right->data){ //RL
+        rightRotation(root->right);
+        leftRotation(root);
+    }else if(balance < -1 && data > root->right->data){ //RR
+        leftRotation(root);
+    }
+}
+
+Node* findMin(Node*& root){
+    if(root == NULL) return root;
+
+    Node* temp = root;
+    while(temp->left != NULL)
+        temp = temp->left;
+
+    return temp;
+}
+
+Node* deleteNode(Node*& root, int data){
+    if(root == NULL) return NULL;
+
+    if(root->data < data){
+        root->right = deleteNode(root->right, data);
+    }else if(root->data > data){
+        root->left = deleteNode(root->left, data);
+    }else{
+        if(root->right == NULL){
+            Node* temp = root->left;
+            delete(root);
+            reabalance(root, data);
+            return temp;
+        }else if(root->left == NULL){
+            Node* temp = root->right;
+            delete(root);
+            reabalance(root, data);
+            return temp;
+        }else{
+            Node* temp = findMin(root->right);
+            root->data = temp->data;
+            root->right = deleteNode(root->right, temp->data);
+            reabalance(root, data);
+            return root;
+        }
+    }
+
+}
+
 void insertNode(Node*& root, int data){
     if(root == NULL){
         Node* newNode = new Node();
@@ -86,19 +141,7 @@ void insertNode(Node*& root, int data){
 
     root->height = max(height(root->left), height(root->right)) + 1;
 
-    int balance = checkBalance(root);
-
-    if(balance > 1 && data <= root->left->data){ //LL
-        rightRotation(root);
-    }else if(balance > 1 && data > root->left->data){ //LR
-        leftRotation(root->left);
-        rightRotation(root);
-    }else if(balance < -1 && data <= root->right->data){ //RL
-        rightRotation(root->right);
-        leftRotation(root);
-    }else if(balance < -1 && data > root->right->data){ //RR
-        leftRotation(root);
-    }
+    reabalance(root, data);
 
 }
 
@@ -130,6 +173,11 @@ int main(){
     insertNode(root, 40);
     insertNode(root, 50);
     insertNode(root, 25);
+    insertNode(root, 51);
+
+    deleteNode(root, 51);
+    deleteNode(root, 50);
+    deleteNode(root, 40);
 
     printTree(root);
 
