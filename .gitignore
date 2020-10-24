@@ -6,10 +6,14 @@ C++/test2.cpp
 C++/test2.o
 C++/test2
 HR/Mathematics/test.cpp
-HR/Mathematics/test.o
+HR/Mathematics/*.o
 HR/Mathematics/test
+HR/Mathematics/myInput.txt
 HR/SolvedProblems/test.cpp
-HR/SolvedProblems/test.o
+HR/SolvedProblems/*.o
 HR/SolvedProblems/test
 HR/SolvedProblems/myInput.txt
+C++/test.cpp
+C++/*.o
+C++/test
 python/test.py
