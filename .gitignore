@@ -13,6 +13,9 @@ HR/SolvedProblems/test.cpp
 HR/SolvedProblems/*.o
 HR/SolvedProblems/test
 HR/SolvedProblems/myInput.txt
+HR/SolvedProblems/input31.txt
+HR/SolvedProblems/test2
+HR/SolvedProblems/test2.cpp
 C++/test.cpp
 C++/*.o
 C++/test
