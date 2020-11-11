@@ -38,7 +38,7 @@ void sortArr(int arr[], int arrSize){
 
     for(int i = 1; i < arrSize; i++){
          int j = i;
-         while(arr[j] < arr[j - 1] && j > 0){
+         while(j > 0 && arr[j] < arr[j - 1]){
             swapThem(arr[j], arr[j - 1]);
             j--;
          }
