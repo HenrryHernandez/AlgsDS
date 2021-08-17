@@ -9,7 +9,9 @@ using namespace std;
 #define ttf 100001 //two to the five
 #define len(x) x.size()
 #define nf(i, x, n) for(int i = x; i < n; i++) //normal for (<)
+#define dnf(i, x, n, n2) for(int i = x; i < n; i += n2) //dynamic normal for (<)
 #define ef(i, x, n) for(int i = x; i <= n; i++) //equals for (<=)
+#define def(i, x, n, n2) for(int i = x; i <= n; i += n2) //dynamic equals for (<=)
 #define rnf(i, x, n) for(int i = x; i > n; i--) //reverse normal for (>)
 #define ref(i, x, n) for(int i = x; i >= n; i--) //reverse equals for (>=)
 #define odv vector<int> //one-dimension vector
@@ -18,6 +20,8 @@ using namespace std;
 #define initv(x) fivw(x, 0) //initialize vector
 #define svec(v) sort(v.begin(), v.end()) //sort vector
 #define rsvec(v) sort(v.rbegin(), v.rend()) //reverse-sort vector
+
+#define fillArr(arr, n) nf(i, 0, n) cin >> arr[i];
 
 /*Functions*/
 template <typename T>
@@ -49,13 +53,52 @@ bool isPalindrome(string &s){
     return true;
 }
 
-bool cmp(vector<int>& a, vector<int>& b)
-{
-    return a[1] < b[1];
+struct cmp {
+    bool operator() (const PP& a, const PP& b)
+    {
+        if(a.first < b.first) return true;
+        else if(b.first < a.first) return false;
+        else {
+            return a.second < b.second;
+        }
+    }
+};
+
+double roundUpTo2(double n){
+    n *= 1000;
+    int temp = (int)n;
+    if(temp % 10 >= 5) temp += 10;
+    temp /= 10;
+    n = (double)temp / 100;
+    return n;
+}
+
+bool binarySearch(vector<ll> &v, int l, int r, int num) {
+   if (l <= r) {
+      int mid = (l + r) / 2;
+      if (v[mid] == num)
+         return true;
+      if (v[mid] > num)
+         return binarySearch(v, l, mid - 1, num);
+      if (v[mid] < num)
+         return binarySearch(v, mid + 1, r, num);
+   }
+   return false;
+}
+
+bool isPerfectSquare(int n){
+    double guess = sqrt(n);
+    int r = floor(guess);
+    if(r*r == n) return true;
+    else {
+        r = ceil(guess);
+        return r*r == n;
+    }
 }
 
 void solve() {
 
+    return;
 }
 
 int main(){
