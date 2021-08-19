@@ -23,6 +23,43 @@ using namespace std;
 
 #define fillArr(arr, n) nf(i, 0, n) cin >> arr[i];
 
+
+int nc2(int n) {
+    return n * (n - 1) / 2;
+}
+
+set<int> get_odd_factors(int n) {
+    map<int, int> factors;
+    while (n > 1) {
+        factors[spf[n]]++;
+        n /= spf[n];
+    }
+    
+    set<int> odd_factors;
+    for (auto [factor, power] : factors) {
+        if (power % 2 == 1) {
+            odd_factors.insert(factor);
+        }
+    }
+    
+    return odd_factors;
+}
+
+//get smallest prime factors of number from 2 to n
+vector<int> getSPFs(int n) {
+    vector<int> spf(n + 1, -1);
+
+    for (int i = 2; i <= n; i++) {
+        if (spf[i] == -1) {
+            for (int j = i; j <= n; j += i) {
+                if (spf[j] == -1) spf[j] = i;
+            }
+        }
+    }
+
+    return spf;
+}
+
 /*Functions*/
 template <typename T>
 void printVec(vector<T> &v){
