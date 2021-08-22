@@ -6,13 +6,13 @@ using namespace std;
 
 #define ll long long int
 #define PP pair<ll, ll>
-#define ttf 100001 //two to the five
+#define ttf 100001 //2^5
 #define len(x) x.size()
-#define nf(i, x, n) for(int i = x; i < n; i++) //normal for (<)
-#define dnf(i, x, n, n2) for(int i = x; i < n; i += n2) //dynamic normal for (<)
+#define bf(i, x, n) for(int i = x; i < n; i++) //basic for (<)
+#define dbf(i, x, n, n2) for(int i = x; i < n; i += n2) //dynamic basic for (<)
 #define ef(i, x, n) for(int i = x; i <= n; i++) //equals for (<=)
 #define def(i, x, n, n2) for(int i = x; i <= n; i += n2) //dynamic equals for (<=)
-#define rnf(i, x, n) for(int i = x; i > n; i--) //reverse normal for (>)
+#define rbf(i, x, n) for(int i = x; i > n; i--) //reverse basic for (>)
 #define ref(i, x, n) for(int i = x; i >= n; i--) //reverse equals for (>=)
 #define odv vector<int> //one-dimension vector
 #define tdv vector<vector<int>> //two-dimension vector
@@ -22,43 +22,6 @@ using namespace std;
 #define rsvec(v) sort(v.rbegin(), v.rend()) //reverse-sort vector
 
 #define fillArr(arr, n) nf(i, 0, n) cin >> arr[i];
-
-
-int nc2(int n) {
-    return n * (n - 1) / 2;
-}
-
-set<int> get_odd_factors(int n) {
-    map<int, int> factors;
-    while (n > 1) {
-        factors[spf[n]]++;
-        n /= spf[n];
-    }
-    
-    set<int> odd_factors;
-    for (auto [factor, power] : factors) {
-        if (power % 2 == 1) {
-            odd_factors.insert(factor);
-        }
-    }
-    
-    return odd_factors;
-}
-
-//get smallest prime factors of number from 2 to n
-vector<int> getSPFs(int n) {
-    vector<int> spf(n + 1, -1);
-
-    for (int i = 2; i <= n; i++) {
-        if (spf[i] == -1) {
-            for (int j = i; j <= n; j += i) {
-                if (spf[j] == -1) spf[j] = i;
-            }
-        }
-    }
-
-    return spf;
-}
 
 /*Functions*/
 template <typename T>
@@ -77,6 +40,43 @@ void printVec2(vector<vector<T>> &vv){
         }
         cout << endl;
     }
+}
+
+int nc2(int n) {
+    return n * (n - 1) / 2;
+}
+
+//get smallest prime factors of numbers from 2 to n
+vector<int> getSPFs(int n) {
+    vector<int> spf(n + 1, -1);
+
+    for (int i = 2; i <= n; i++) {
+        if (spf[i] == -1) {
+            for (int j = i; j <= n; j += i) {
+                if (spf[j] == -1) spf[j] = i;
+            }
+        }
+    }
+
+    return spf;
+}
+
+set<int> get_odd_factors(int n) {
+    vector<int> spf; // = getSPFs(n);
+    map<int, int> factors;
+    while (n > 1) {
+        factors[spf[n]]++;
+        n /= spf[n];
+    }
+    
+    set<int> odd_factors;
+    for (auto [factor, power] : factors) {
+        if (power % 2 == 1) {
+            odd_factors.insert(factor);
+        }
+    }
+    
+    return odd_factors;
 }
 
 bool isPalindrome(string &s){
@@ -110,7 +110,7 @@ double roundUpTo2(double n){
     return n;
 }
 
-bool binarySearch(vector<ll> &v, int l, int r, int num) {
+bool binarySearch(vector<int> &v, int l, int r, int num) {
    if (l <= r) {
       int mid = (l + r) / 2;
       if (v[mid] == num)
@@ -131,6 +131,23 @@ bool isPerfectSquare(int n){
         r = ceil(guess);
         return r*r == n;
     }
+}
+
+string getBinaryRepr(int n, int digits) {
+    string s = "";
+
+    int i = 0;
+    while (n > 0) {
+        s += to_string(n % 2);
+        n = n / 2;
+        i++;
+    }
+
+    for(int j = 0; j < digits - i; j++) s += "0";
+
+    reverse(s.begin(), s.end());
+
+    return s;
 }
 
 void solve() {
