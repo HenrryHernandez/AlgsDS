@@ -20,8 +20,8 @@ using namespace std;
 #define initv(x) fivw(x, 0) //initialize vector
 #define svec(v) sort(v.begin(), v.end()) //sort vector
 #define rsvec(v) sort(v.rbegin(), v.rend()) //reverse-sort vector
-
-#define fillArr(arr, n) nf(i, 0, n) cin >> arr[i];
+#define fillArr(arr, n) bf(i, 0, n) cin >> arr[i];
+#define lcm(x, y) ((x * y) / __gcd(x, y))
 
 /*Functions*/
 template <typename T>
@@ -90,7 +90,7 @@ bool isPalindrome(string &s){
     return true;
 }
 
-struct cmp {
+struct cmpPP {
     bool operator() (const PP& a, const PP& b)
     {
         if(a.first < b.first) return true;
@@ -100,6 +100,12 @@ struct cmp {
         }
     }
 };
+
+bool cmpDigStrs (string a, string b){
+    if(a.size() != b.size()) return a.size() < b.size();
+    return a < b;
+};
+
 
 double roundUpTo2(double n){
     n *= 1000;
