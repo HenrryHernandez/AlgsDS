@@ -6,7 +6,7 @@ using namespace std;
 
 #define ll long long int
 #define PP pair<ll, ll>
-#define ttf 100001 //2^5
+#define ttf 10e5 //2^5
 #define len(x) x.size()
 #define bf(i, x, n) for(int i = x; i < n; i++) //basic for (<)
 #define dbf(i, x, n, n2) for(int i = x; i < n; i += n2) //dynamic basic for (<)
@@ -22,6 +22,8 @@ using namespace std;
 #define rsvec(v) sort(v.rbegin(), v.rend()) //reverse-sort vector
 #define fillArr(arr, n) bf(i, 0, n) cin >> arr[i];
 #define lcm(x, y) ((x * y) / __gcd(x, y))
+
+const ll MOD = 1e9 + 7;
 
 /*Functions*/
 template <typename T>
@@ -68,14 +70,14 @@ set<int> get_odd_factors(int n) {
         factors[spf[n]]++;
         n /= spf[n];
     }
-    
+
     set<int> odd_factors;
     for (auto [factor, power] : factors) {
         if (power % 2 == 1) {
             odd_factors.insert(factor);
         }
     }
-    
+
     return odd_factors;
 }
 
@@ -154,6 +156,13 @@ string getBinaryRepr(int n, int digits) {
     reverse(s.begin(), s.end());
 
     return s;
+}
+
+vector<int> adj[100001];
+vector<bool> visited[100001];
+void dfs(, int index){
+    visited[index]=true;
+    for(auto i : adj[index]) if(!visited[i]) dfs(i);
 }
 
 void solve() {
