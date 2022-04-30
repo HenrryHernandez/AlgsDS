@@ -1,3 +1,4 @@
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -6,9 +7,9 @@ using namespace std;
 
 #define ll long long int
 #define PP pair<ll, ll>
-#define INF 1e9 + 10
+#define ttf 100001 //2^5
+#define MOD 10e9 + 7; //it's a ll
 #define len(x) x.size()
-#define pb push_back
 #define bf(i, x, n) for(int i = x; i < n; i++) //basic for (<)
 #define dbf(i, x, n, n2) for(int i = x; i < n; i += n2) //dynamic basic for (<)
 #define ef(i, x, n) for(int i = x; i <= n; i++) //equals for (<=)
@@ -23,8 +24,6 @@ using namespace std;
 #define rsvec(v) sort(v.rbegin(), v.rend()) //reverse-sort vector
 #define fillArr(arr, n) bf(i, 0, n) cin >> arr[i];
 #define lcm(x, y) ((x * y) / __gcd(x, y))
-
-const ll MOD = 1e9 + 7;
 
 /*Functions*/
 template <typename T>
@@ -159,67 +158,19 @@ string getBinaryRepr(int n, int digits) {
     return s;
 }
 
-struct Course {
-    int e,t,p,index;
-};
-
-odv getTime(vector<Course>& courses) {
-    int n = courses.size();
-    int m = 100;
-    tdv dp(n + 1, vector<int>(m + 1, INF));
-    
-    ef(i,1,n) {
-        Course cur = courses[i - 1];
-        ef(j,1,m) {
-            if(cur.p >= j) {
-                int a = dp[i - 1][j];
-                int b = cur.t;
-                dp[i][j] = min(a, b);
-            } else {
-                int a = dp[i - 1][j];
-                int b = dp[i - 1][j - cur.p] + cur.t;
-                dp[i][j] = min(a, b);
-            }
-        }
-    }
-    
-    if(dp[n][m] == INF) return {-1};
-    
-    odv ans;
-    ans.pb(dp[n][m]);
-    
-    int i = n;
-    int j = m;
-    while(i > 0 && j > 0) {
-        if(dp[i][j] != dp[i - 1][j]) {
-            ans.pb(courses[i - 1].index);
-            j -= courses[i - 1].p;
-            i--;
-        } else {
-            i--;
-        }
-    }
-    
-    return ans;
-}
-
-vector<int> adj[100001];
-vector<bool> visited[100001];
-void dfs(int index){
-    visited[index]=true;
-    for(auto i : adj[index]) if(!visited[i]) dfs(i);
-}
-
 void solve() {
+    ll i = (ll)MOD;
+    cout << i << endl;
 
     return;
 }
 
 int main(){
-	freopen("myInput.txt", "r", stdin);
+	//freopen("myInput.txt", "r", stdin);
 	quick;
 
-	cases(solve);
+	//cases(solve);
+    solve();
 
 	return 0;
 }
